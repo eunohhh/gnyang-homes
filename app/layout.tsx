@@ -11,9 +11,9 @@ export const metadata: Metadata = {
     template: "%s | gnyang",
   },
   description: "gnyang는 Misun의 모든 기록을 저장하는 공간입니다.",
-  metadataBase: new URL("https://gnyang.me"),
+  metadataBase: new URL("https://gnyang.homes"),
   keywords: ["블로그", "만화", "고양이"],
-  authors: [{ name: "YiiiMisun", url: "https://gnyang.me" }],
+  authors: [{ name: "YiiiMisun", url: "https://gnyang.homes" }],
   creator: "YiiiMisun",
   publisher: "eunoh",
 };

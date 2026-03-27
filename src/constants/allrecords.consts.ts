@@ -1,6 +1,7 @@
 import { Category } from "@/types/allrecords.types";
 
 export const QUERY_KEY_RECORDS = "records";
+export const QUERY_KEY_POOLSOOP = "poolsoop";
 export const QUERY_KEY_ALL = "all";
 export const QUERY_KEY_RECORD = "record";
 export const QUERY_KEY_DESCS = "descs";

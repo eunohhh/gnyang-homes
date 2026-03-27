@@ -89,6 +89,7 @@ function GnyangModal({
               <Skeleton className="h-56 w-full sm:h-96" />
             </div>
           )}
+
           {!isPending && record && isOpen && (
             <div className="relative flex h-full min-h-[70svh] flex-1 flex-col items-center justify-center space-y-4">
               <GnyangImages
@@ -97,7 +98,7 @@ function GnyangModal({
                 isNeedObjectCover={isNeedObjectCover}
                 shouldPreload={isOpen}
                 loadedImageUrls={loadedImageUrls}
-              requestedImageUrls={requestedImageUrls}
+                requestedImageUrls={requestedImageUrls}
               />
             </div>
           )}

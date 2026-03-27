@@ -14,6 +14,7 @@ interface GnyangImageProps {
   isNeedObjectCover: boolean;
   isPriority?: boolean;
   loadedImageUrls: Set<string>;
+  className?: string;
 }
 
 function GnyangImage({
@@ -22,6 +23,7 @@ function GnyangImage({
   isNeedObjectCover,
   isPriority = false,
   loadedImageUrls,
+  className,
 }: GnyangImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -67,7 +69,8 @@ function GnyangImage({
             type === "ilsang",
           "h-[228px] min-h-[228px] sm:h-[500px] sm:min-h-[300px]":
             isNeedObjectCover,
-        }
+        },
+        className
       )}
     >
       <Image

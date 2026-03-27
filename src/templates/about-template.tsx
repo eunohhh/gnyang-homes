@@ -1,10 +1,10 @@
 import { AboutText } from "@/features/about";
-import H1 from "@/features/home/ui/h1";
+import HomeTitle from "@/features/home/ui/home-title";
 
 function AboutTemplate() {
   return (
     <div className="flex flex-col overflow-hidden sm:min-h-[calc(100svh-80px)]">
-      <H1 />
+      <HomeTitle />
       <AboutText />
     </div>
   );

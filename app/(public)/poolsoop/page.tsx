@@ -1,4 +1,11 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
 import { Metadata } from "next";
+import { prefetchPoolsoopRecords } from "@/lib/supabase/prefetch";
+import { createClient } from "@/lib/supabase/server";
 import PoolsoopTemplate from "@/templates/poolsoop-template";
 
 export const metadata: Metadata = {
@@ -6,8 +13,17 @@ export const metadata: Metadata = {
   description: "고양이 관찰일기",
 };
 
-function PoolsOopPage() {
-  return <PoolsoopTemplate />;
+async function PoolSoopPage() {
+  const queryClient = new QueryClient();
+  const supabase = await createClient();
+  await prefetchPoolsoopRecords(queryClient, supabase);
+  const dehydratedState = dehydrate(queryClient);
+
+  return (
+    <HydrationBoundary state={dehydratedState}>
+      <PoolsoopTemplate />
+    </HydrationBoundary>
+  );
 }
 
-export default PoolsOopPage;
+export default PoolSoopPage;

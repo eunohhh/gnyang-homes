@@ -11,3 +11,9 @@ export const uhbeeHyeki = localFont({
   display: "swap",
   variable: "--font-uhbeehyeki",
 });
+
+export const yUniverse = localFont({
+  src: "./YUniverse-B.woff2",
+  display: "swap",
+  variable: "--font-yuniverse",
+});

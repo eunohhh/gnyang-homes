@@ -1,4 +1,4 @@
-import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import type { PostgrestError } from "@supabase/supabase-js";
 import sharp from "sharp";
 import { DEFAULT_LIMIT } from "@/constants/allrecords.consts";
 import { sanitizeFilename } from "@/lib/utils";
@@ -9,6 +9,9 @@ import {
   RecordImage,
   RecordImagePost,
 } from "@/types/allrecords.types";
+import { createClient } from "./server";
+
+type SupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
 interface GetRecordsParams {
   page?: number;
@@ -514,4 +517,23 @@ export async function deleteDescs(supabase: SupabaseClient, ids: string[]) {
   }
 
   return data;
+}
+
+export async function getAllPoolsoopRecords(supabase: SupabaseClient) {
+  const { data, error } = await supabase
+    .from("allrecords")
+    .select("*")
+    .eq("category", "poolsoop");
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const sortedData = data.sort(
+    (a, b) =>
+      Number(a.title.replace("풀숲-", "")) -
+      Number(b.title.replace("풀숲-", ""))
+  );
+
+  return sortedData || [];
 }

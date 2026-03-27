@@ -3,9 +3,10 @@ import { QueryClient } from "@tanstack/react-query";
 import {
   DEFAULT_RECORDS_PARAMS,
   QUERY_KEY_ALL,
+  QUERY_KEY_POOLSOOP,
   QUERY_KEY_RECORDS,
 } from "@/constants/allrecords.consts";
-import { getRecordsSupabase } from "./crud";
+import { getAllPoolsoopRecords, getRecordsSupabase } from "./crud";
 
 export async function prefetchRecords(
   queryClient: QueryClient,
@@ -15,6 +16,19 @@ export async function prefetchRecords(
     queryKey: [QUERY_KEY_RECORDS, QUERY_KEY_ALL],
     queryFn: async () => {
       const data = await getRecordsSupabase(supabase, DEFAULT_RECORDS_PARAMS);
+      return data;
+    },
+  });
+}
+
+export async function prefetchPoolsoopRecords(
+  queryClient: QueryClient,
+  supabase: SupabaseClient
+) {
+  await queryClient.prefetchQuery({
+    queryKey: [QUERY_KEY_POOLSOOP],
+    queryFn: async () => {
+      const data = await getAllPoolsoopRecords(supabase);
       return data;
     },
   });

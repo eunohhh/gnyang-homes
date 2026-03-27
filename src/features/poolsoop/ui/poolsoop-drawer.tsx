@@ -1,36 +1,83 @@
 "use client";
 
+import { Options } from "nuqs";
+import { useState } from "react";
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { yUniverse } from "@/fonts/font";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-function PoolsoopDrawer() {
+interface PoolsoopDrawerProps {
+  descriptions: string[] | undefined;
+  setNumber: (
+    value: number | ((old: number) => number | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
+}
+
+function PoolsoopDrawer({ descriptions, setNumber }: PoolsoopDrawerProps) {
   const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+
+  const handleSetNumber = (number: number) => {
+    setOpen(false);
+    setNumber(number);
+  };
+
   return (
-    <Drawer direction={isMobile ? "bottom" : "left"}>
-      <DrawerTrigger className="cursor-pointer">Open</DrawerTrigger>
+    <Drawer
+      direction={isMobile ? "bottom" : "left"}
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <DrawerTrigger className="cursor-pointer">
+        <p
+          className={`${yUniverse.variable} font-yuniverse text-[#00924f] text-[30px] sm:text-[40px]`}
+        >
+          웑
+        </p>
+      </DrawerTrigger>
       <DrawerContent
         topClassName="rounded-none border-none hidden group-data-[vaul-drawer-direction=bottom]/drawer-content:hidden"
-        className="rounded-none border-none data-[vaul-drawer-direction=bottom]:rounded-t-none data-[vaul-drawer-direction=bottom]:border-t-0"
+        className="rounded-none border-none bg-transparent p-4 data-[vaul-drawer-direction=bottom]:rounded-t-none data-[vaul-drawer-direction=bottom]:border-t-0"
+        overlayClassName="bg-transparent"
       >
-        <DrawerHeader>
-          <div className="flex items-center justify-between">
-            <DrawerTitle>Are you absolutely sure?</DrawerTitle>
-            <DrawerClose>X</DrawerClose>
+        <div className="flex h-full flex-col border border-[#00924f] text-[#00924f]">
+          <DrawerHeader>
+            <div className="flex items-center justify-between text-[#00924f]">
+              <DrawerTitle className="text-[#00924f]">목차</DrawerTitle>
+              <DrawerClose className="cursor-pointer">X</DrawerClose>
+            </div>
+            <DrawerDescription className="hidden">
+              poolsoop-drawer
+            </DrawerDescription>
+          </DrawerHeader>
+
+          <div className="flex h-full flex-1 flex-col gap-4 overflow-hidden bg-white/70 p-4">
+            <ScrollArea className="h-full">
+              <div className="flex flex-col gap-2">
+                {descriptions?.map((description, index) => (
+                  <button
+                    type="button"
+                    key={description}
+                    className="w-full cursor-pointer text-left"
+                    onClick={() => handleSetNumber(index + 1)}
+                  >
+                    {description}
+                  </button>
+                ))}
+              </div>
+            </ScrollArea>
           </div>
-          <DrawerDescription className="hidden">
-            This action cannot be undone.
-          </DrawerDescription>
-        </DrawerHeader>
-        <DrawerFooter></DrawerFooter>
+        </div>
       </DrawerContent>
     </Drawer>
   );
