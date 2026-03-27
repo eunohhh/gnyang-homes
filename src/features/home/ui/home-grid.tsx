@@ -16,6 +16,7 @@ function HomeGrid() {
   const { category } = useHomeStore();
   const { content, isOpen, setContent } = useContentParam();
   const loadedImageUrls = useRef(new Set<string>());
+  const requestedImageUrls = useRef(new Set<string>());
   const prevCategoryKeyRef = useRef<string | null>(null);
   const categoryKey = category.join("|");
 
@@ -73,6 +74,7 @@ function HomeGrid() {
                 key={record.id}
                 record={record}
                 loadedImageUrls={loadedImageUrls.current}
+                requestedImageUrls={requestedImageUrls.current}
               />
             ))}
           </div>
@@ -89,6 +91,7 @@ function HomeGrid() {
         onClose={handleClose}
         initialRecord={visibleItems.find((record) => record.slug === content)}
         loadedImageUrls={loadedImageUrls.current}
+        requestedImageUrls={requestedImageUrls.current}
       />
     </>
   );

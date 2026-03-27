@@ -20,6 +20,7 @@ interface GnyangModalProps {
   onClose: () => void;
   initialRecord?: Record;
   loadedImageUrls: Set<string>;
+  requestedImageUrls: Set<string>;
 }
 
 function GnyangModal({
@@ -28,6 +29,7 @@ function GnyangModal({
   onClose,
   initialRecord,
   loadedImageUrls,
+  requestedImageUrls,
 }: GnyangModalProps) {
   const {
     data: record,
@@ -95,6 +97,7 @@ function GnyangModal({
                 isNeedObjectCover={isNeedObjectCover}
                 shouldPreload={isOpen}
                 loadedImageUrls={loadedImageUrls}
+              requestedImageUrls={requestedImageUrls}
               />
             </div>
           )}

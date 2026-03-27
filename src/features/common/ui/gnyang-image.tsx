@@ -23,19 +23,12 @@ function GnyangImage({
   isPriority = false,
   loadedImageUrls,
 }: GnyangImageProps) {
-  const [isLoaded, setIsLoaded] = useState(() =>
-    loadedImageUrls.has(image.url)
-  );
+  const [isLoaded, setIsLoaded] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
 
   const imgRef = useRef<HTMLImageElement>(null);
 
-  // priority 이미지가 이미 캐시되어 있는 경우 처리
   useEffect(() => {
-    if (loadedImageUrls.has(image.url)) {
-      setIsLoaded(true);
-      return;
-    }
     if (imgRef.current?.complete) {
       setIsLoaded(true);
       loadedImageUrls.add(image.url);
@@ -49,6 +42,7 @@ function GnyangImage({
       setShowLoader(false);
       return;
     }
+
     const timer = setTimeout(() => setShowLoader(true), 100);
     return () => clearTimeout(timer);
   }, [isLoaded]);
@@ -59,9 +53,7 @@ function GnyangImage({
   };
 
   const handleError = () => {
-    // 에러 발생 시에도 로더를 숨김
     setIsLoaded(true);
-    loadedImageUrls.add(image.url);
   };
 
   return (

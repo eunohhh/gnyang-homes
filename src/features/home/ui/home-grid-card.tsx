@@ -13,16 +13,21 @@ import type { Record } from "@/types/allrecords.types";
 interface HomeGridCardProps {
   record: Record;
   loadedImageUrls: Set<string>;
+  requestedImageUrls: Set<string>;
 }
 
-function HomeGridCard({ record, loadedImageUrls }: HomeGridCardProps) {
+function HomeGridCard({
+  record,
+  loadedImageUrls,
+  requestedImageUrls,
+}: HomeGridCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const { setContent } = useContentParam();
   // 상세 이미지들을 미리 로드하는 함수
   const handlePreloadImages = useCallback(() => {
     if (!record.images || !Array.isArray(record.images)) return;
 
-    // 프리로드할 URL 추출 (이미 로드된 것은 제외)
+    // 이미 로드했거나 프리로드를 요청한 이미지는 제외
     const srcs: string[] = [];
     for (const image of record.images) {
       if (
@@ -32,7 +37,7 @@ function HomeGridCard({ record, loadedImageUrls }: HomeGridCardProps) {
         typeof (image as { url?: unknown }).url === "string"
       ) {
         const url = (image as { url: string }).url;
-        if (!loadedImageUrls.has(url)) {
+        if (!loadedImageUrls.has(url) && !requestedImageUrls.has(url)) {
           srcs.push(url);
         }
       }
@@ -40,14 +45,14 @@ function HomeGridCard({ record, loadedImageUrls }: HomeGridCardProps) {
 
     if (srcs.length === 0) return;
 
-    // 프리로드 전에 URL 등록 (중복 호출 방지)
+    // 프리로드 요청 여부를 따로 기록해 중복 요청을 막는다.
     for (const src of srcs) {
-      loadedImageUrls.add(src);
+      requestedImageUrls.add(src);
     }
 
     // 실제 NextImage sizes와 동일하게 맞춰서 프리로드 폭 계산
     preloadImages(srcs, { sizes: IMAGE_SIZES });
-  }, [record.images, loadedImageUrls]);
+  }, [record.images, loadedImageUrls, requestedImageUrls]);
 
   // ForesightJS로 마우스 움직임 예측하여 미리 이미지 로드
   const { elementRef: buttonRef } = useForesight<HTMLButtonElement>({
