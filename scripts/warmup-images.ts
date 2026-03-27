@@ -48,7 +48,7 @@ async function getImageUrls(): Promise<string[]> {
 }
 
 // Next.js 기본 deviceSizes (fill prop 사용 시 전체 적용)
-const WIDTHS = [640, 750, 828, 1080, 1200, 1920, 2048, 3840];
+const WIDTHS = [750, 1080, 1200, 1920];
 const QUALITY = 75;
 
 async function warmupImage(
