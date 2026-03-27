@@ -3,7 +3,6 @@
 import { createClient } from "@supabase/supabase-js";
 
 const BASE_URL = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
-const BYPASS_TOKEN = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
 
 // Supabase 클라이언트 생성
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -59,14 +58,9 @@ async function warmupImage(
 ): Promise<void> {
   const url = `${BASE_URL}/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${QUALITY}`;
 
-  const headers: Record<string, string> = {};
-  if (BYPASS_TOKEN) {
-    headers["x-vercel-protection-bypass"] = BYPASS_TOKEN;
-  }
-
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
-      const response = await fetch(url, { headers });
+      const response = await fetch(url);
       if (response.ok) {
         console.log(`✓ Warmed: ${src} @ ${width}w`);
         return;
@@ -96,18 +90,18 @@ async function warmup(): Promise<void> {
     return;
   }
 
-  const tasks: Promise<void>[] = [];
+  // 동시 요청 제한 (서버 부하 방지)
+  const CONCURRENCY = 5;
+  const queue: (() => Promise<void>)[] = [];
 
   for (const src of IMAGES_TO_WARM) {
     for (const width of WIDTHS) {
-      tasks.push(warmupImage(src, width));
+      queue.push(() => warmupImage(src, width));
     }
   }
 
-  // 동시 요청 제한 (서버 부하 방지)
-  const CONCURRENCY = 5;
-  for (let i = 0; i < tasks.length; i += CONCURRENCY) {
-    await Promise.all(tasks.slice(i, i + CONCURRENCY));
+  for (let i = 0; i < queue.length; i += CONCURRENCY) {
+    await Promise.all(queue.slice(i, i + CONCURRENCY).map((fn) => fn()));
   }
 
   console.log("\n✅ Warmup complete!");
