@@ -15,6 +15,7 @@ interface GnyangImageProps {
   isPriority?: boolean;
   loadedImageUrls: Set<string>;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 function GnyangImage({
@@ -24,6 +25,7 @@ function GnyangImage({
   isPriority = false,
   loadedImageUrls,
   className,
+  style,
 }: GnyangImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showLoader, setShowLoader] = useState(false);
@@ -72,6 +74,7 @@ function GnyangImage({
         },
         className
       )}
+      style={style}
     >
       <Image
         ref={imgRef}

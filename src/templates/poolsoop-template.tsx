@@ -1,7 +1,7 @@
 "use client";
 
 import { parseAsInteger, useQueryState } from "nuqs";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import {
   PoolsoopFooter,
   PoolsoopHeader,
@@ -15,6 +15,8 @@ function PoolsoopTemplate() {
     "number",
     parseAsInteger.withDefault(1)
   );
+  const loadedImageUrls = useRef(new Set<string>());
+  const requestedImageUrls = useRef(new Set<string>());
   const { data: poolsoopRecords, isPending, error } = usePoolsoopRecordsQuery();
 
   useEffect(() => {
@@ -22,12 +24,6 @@ function PoolsoopTemplate() {
       console.error(error);
     }
   }, [error]);
-
-  useEffect(() => {
-    if (poolsoopRecords) {
-      console.log(poolsoopRecords);
-    }
-  }, [poolsoopRecords]);
 
   const descriptions = useMemo(() => {
     return poolsoopRecords?.map((record) => record.description);
@@ -45,7 +41,11 @@ function PoolsoopTemplate() {
   return (
     <section className="flex h-svh flex-col items-center justify-center">
       <PoolsoopHeader descriptions={descriptions} setNumber={setNumber} />
-      <PoolsoopToon contents={contents as unknown as RecordImage[]} />
+      <PoolsoopToon
+        contents={contents as unknown as RecordImage[]}
+        loadedImageUrls={loadedImageUrls.current}
+        requestedImageUrls={requestedImageUrls.current}
+      />
       <PoolsoopFooter />
     </section>
   );
