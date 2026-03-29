@@ -1,8 +1,18 @@
-import { PropsWithChildren } from "react";
+import { ReactNode } from "react";
 import { MainWrapper } from "@/features/home";
 
-function PublicLayout({ children }: PropsWithChildren) {
-  return <MainWrapper>{children}</MainWrapper>;
+interface PublicLayoutProps {
+  children: ReactNode;
+  modal: ReactNode;
+}
+
+function PublicLayout({ children, modal }: PublicLayoutProps) {
+  return (
+    <>
+      <MainWrapper>{children}</MainWrapper>
+      {modal}
+    </>
+  );
 }
 
 export default PublicLayout;

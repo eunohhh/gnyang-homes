@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, CheckCircle2, MessageSquare } from "lucide-react";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -75,16 +75,17 @@ function ContactForm() {
   }, [error]);
 
   return (
-    <Card className="mx-auto w-full max-w-md">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MessageSquare className="h-5 w-5" />
-          문의하기
+    <Card className="mx-auto w-full border-none bg-[#DBFD00] p-0 shadow-none sm:w-sm sm:max-w-sm">
+      <CardHeader className="px-0 py-4">
+        <CardTitle className="flex items-center gap-2 text-[#00bfff] text-[13px] sm:text-base">
+          궁금한 점이나 문의사항을 남겨주세요.
         </CardTitle>
-        <CardDescription>궁금한 점이나 문의사항을 남겨주세요.</CardDescription>
+        <CardDescription className="hidden">
+          빠른 시일 내에 답변드리겠습니다.
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 p-0">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
@@ -101,6 +102,7 @@ function ContactForm() {
                       placeholder="이름을 입력하세요"
                       {...field}
                       disabled={isPending}
+                      className="border-black bg-white"
                     />
                   </FormControl>
                   <FormMessage />
@@ -120,6 +122,7 @@ function ContactForm() {
                       placeholder="your@email.com"
                       {...field}
                       disabled={isPending}
+                      className="border-black bg-white"
                     />
                   </FormControl>
                   <FormMessage />
@@ -135,14 +138,16 @@ function ContactForm() {
                   <FormLabel>메시지</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="문의 내용을 자세히 적어주세요..."
-                      className="resize-none"
+                      placeholder="문의 내용을 적어주세요..."
+                      className="resize-none border-black bg-white"
                       rows={4}
                       {...field}
                       disabled={isPending}
                     />
                   </FormControl>
-                  <FormDescription>{field.value.length}/1000자</FormDescription>
+                  <FormDescription className="hidden">
+                    {field.value.length}/1000자
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -150,7 +155,7 @@ function ContactForm() {
 
             <Button
               type="submit"
-              className="w-full cursor-pointer"
+              className="mt-6 w-full cursor-pointer bg-[#963900] hover:bg-[#963900]/90"
               disabled={isPending}
             >
               {isPending ? "전송 중..." : "문의 전송"}
@@ -160,7 +165,7 @@ function ContactForm() {
 
         {/* 상태별 알림 메시지 */}
         {status === "success" && (
-          <Alert className="border-green-200 bg-green-50">
+          <Alert className="border-black bg-white">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
             <AlertDescription className="text-green-800">
               문의가 성공적으로 전송되었습니다! 빠른 시일 내에 답변드리겠습니다.
@@ -176,6 +181,7 @@ function ContactForm() {
             </AlertDescription>
           </Alert>
         )}
+        <div className="aspect-[405/217] w-full bg-[url('/cat-care.webp')] bg-center bg-cover bg-no-repeat" />
       </CardContent>
     </Card>
   );

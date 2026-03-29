@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import BoardRouteModal from "@/features/board/ui/board-route-modal";
 import BoardTemplate from "@/templates/board-template";
 
 export const metadata: Metadata = {
@@ -7,7 +8,11 @@ export const metadata: Metadata = {
 };
 
 function BoardPage() {
-  return <BoardTemplate />;
+  return (
+    <BoardRouteModal closeMode="replace" fallbackHref="/">
+      <BoardTemplate />
+    </BoardRouteModal>
+  );
 }
 
 export default BoardPage;
